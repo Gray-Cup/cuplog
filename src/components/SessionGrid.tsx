@@ -65,16 +65,12 @@ export default function SessionGrid() {
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
         {/* Section header */}
         <div className="px-6 md:px-10 pt-16 pb-2">
-          <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-3" style={{ opacity: 0.5 }}>
-            Recent Sessions
-          </p>
           <h2
-            className="font-serif text-ink"
+            className="font-sans font-semibold uppercase text-ink"
             style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
           >
             From the cupping table.
           </h2>
-          <div className="w-full h-px bg-ink mt-6" />
         </div>
 
         {/* 4-column grid */}

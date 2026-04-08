@@ -29,16 +29,12 @@ export default function HowItWorks() {
     <section id="how-it-works" className="bg-paper border-b border-ink">
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
         <div className="px-6 md:px-10 pt-16 pb-2">
-          <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-3" style={{ opacity: 0.5 }}>
-            How It Works
-          </p>
           <h2
-            className="font-serif text-ink"
+            className="font-sans font-semibold uppercase text-ink"
             style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
           >
             Three steps to a better cup.
           </h2>
-          <div className="w-full h-px bg-ink mt-6" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 border-t border-ink">
@@ -61,7 +57,7 @@ export default function HowItWorks() {
               <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-1" style={{ opacity: 0.45 }}>
                 Step {step.step}
               </p>
-              <h3 className="font-serif text-4xl text-ink mb-4">{step.title}</h3>
+              <h3 className="font-sans font-semibold uppercase text-4xl text-ink mb-4">{step.title}</h3>
               <p className="font-sans text-base text-ink leading-relaxed" style={{ opacity: 0.7 }}>
                 {step.description}
               </p>

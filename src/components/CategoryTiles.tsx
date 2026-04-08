@@ -32,16 +32,12 @@ export default function CategoryTiles() {
     <section className="bg-paper border-b border-ink">
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
         <div className="px-6 md:px-10 pt-16 pb-2">
-          <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-3" style={{ opacity: 0.5 }}>
-            What You Can Do
-          </p>
           <h2
-            className="font-serif text-ink"
+            className="font-sans font-semibold uppercase text-ink"
             style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
           >
             Everything you need to cup.
           </h2>
-          <div className="w-full h-px bg-ink mt-6" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-ink">

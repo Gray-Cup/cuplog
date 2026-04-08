@@ -67,16 +67,12 @@ export default function FlavorSelector() {
     <section id="flavours" className="bg-paper border-b border-ink">
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
         <div className="px-6 md:px-10 pt-16 pb-2">
-          <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-3" style={{ opacity: 0.5 }}>
-            Find Your Flavour
-          </p>
           <h2
-            className="font-serif text-ink"
-            style={{ fontSize: "clamp(2.25rem, 4vw, 3.5rem)", lineHeight: 1.0 }}
+            className="font-sans font-semibold uppercase text-ink"
+            style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
           >
             What does your cup taste like?
           </h2>
-          <div className="w-full h-px bg-ink mt-6" />
         </div>
 
         {/* Tab row */}
@@ -110,7 +106,7 @@ export default function FlavorSelector() {
 
           {/* Description */}
           <div className="px-8 md:px-12 py-10">
-            <h3 className="font-serif text-3xl text-ink italic mb-4">
+            <h3 className="font-sans font-semibold uppercase text-3xl text-ink mb-4">
               {selected.label}
             </h3>
             <p

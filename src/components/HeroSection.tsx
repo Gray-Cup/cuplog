@@ -11,7 +11,7 @@ export default function HeroSection() {
         style={{ maxWidth: "1024px", margin: "0 auto", minHeight: "inherit" }}
       >
         <div className="max-w-3xl">
-          <h1 className="font-serif text-hero text-ink hero-headline" style={{ lineHeight: 0.95 }}>
+          <h1 className="font-sans font-semibold uppercase text-hero text-ink hero-headline" style={{ lineHeight: 0.95 }}>
             Score every<br />cup.
           </h1>
 

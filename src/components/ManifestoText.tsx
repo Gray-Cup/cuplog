@@ -8,11 +8,11 @@ export default function ManifestoText() {
         style={{ maxWidth: "1024px", margin: "0 auto" }}
       >
         <h2
-          className="font-serif text-ink"
+          className="font-sans font-semibold uppercase text-ink"
           style={{
             fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
             maxWidth: "900px",
-            lineHeight: 1.15,
+            lineHeight: 1.1,
           }}
         >
           We're unapologetically obsessed with

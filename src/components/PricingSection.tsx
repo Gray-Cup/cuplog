@@ -57,11 +57,8 @@ export default function PricingSection() {
     <section id="pricing" className="bg-paper border-b border-ink">
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
         <div className="px-6 md:px-10 pt-16 pb-2">
-          <p className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-3" style={{ opacity: 0.5 }}>
-            Pricing
-          </p>
           <h2
-            className="font-serif text-ink"
+            className="font-sans font-semibold uppercase text-ink"
             style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
           >
             Simple, honest pricing.
@@ -69,7 +66,6 @@ export default function PricingSection() {
           <p className="font-sans text-lg text-ink mt-4" style={{ opacity: 0.6, maxWidth: "460px" }}>
             Start free. Upgrade when you need more. No surprise fees, no locked features.
           </p>
-          <div className="w-full h-px bg-ink mt-6" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 border-t border-ink">
