@@ -10,34 +10,6 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <>
-      {/* Page hero */}
-      <section className="bg-peach border-b border-ink">
-        <div
-          className="px-6 md:px-12 py-20 md:py-28"
-          style={{ maxWidth: "1280px", margin: "0 auto" }}
-        >
-          <p
-            className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-4"
-            style={{ opacity: 0.6 }}
-          >
-            Pricing
-          </p>
-          <h1
-            className="font-serif text-ink"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: 0.95 }}
-          >
-            Start free.<br />Upgrade when ready.
-          </h1>
-          <p
-            className="font-sans text-lg text-ink mt-6"
-            style={{ maxWidth: "520px", opacity: 0.75 }}
-          >
-            No surprise fees. No locked-in features. Just clean, fair pricing for
-            people who take cupping seriously.
-          </p>
-        </div>
-      </section>
-
       <PricingSection />
 
       {/* FAQ-style callout */}

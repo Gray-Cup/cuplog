@@ -56,12 +56,23 @@ export default function PricingSection() {
   return (
     <section id="pricing" className="bg-paper border-b border-ink">
       <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
+        <div className="px-6 md:px-10 pt-16 pb-2 mb-4">
+          <h2
+            className="font-sans font-semibold uppercase text-ink"
+            style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)", lineHeight: 1.0 }}
+          >
+            Simple, honest pricing.
+          </h2>
+          <p className="font-sans text-lg text-ink mt-4" style={{ opacity: 0.6, maxWidth: "460px" }}>
+            Start free. Upgrade when you need more. No surprise fees, no locked features.
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 border-t border-ink">
           {plans.map((plan, i) => (
             <div
               key={plan.name}
-              className={`px-7 py-10 ${plan.featured ? "bg-ink" : "bg-paper"} ${i < plans.length - 1 ? "border-b md:border-b-0 md:border-r border-ink" : ""}`}
+              className={`px-7 py-10 ${plan.featured ? "bg-peach" : "bg-paper"} ${i < plans.length - 1 ? "border-b md:border-b-0 md:border-r border-ink" : ""}`}
             >
               <p
                 className={`font-sans font-bold text-xs uppercase tracking-label ${plan.featured ? "text-peach" : "text-ink"}`}
