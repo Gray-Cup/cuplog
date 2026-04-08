@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export default function HeroSection() {
   return (
@@ -7,10 +8,10 @@ export default function HeroSection() {
       style={{ minHeight: "85vh" }}
     >
       <div
-        className="flex flex-col justify-center px-6 md:px-12 py-10"
+        className="flex flex-col md:flex-row items-center justify-between gap-10 px-6 md:px-12 py-10"
         style={{ maxWidth: "1024px", margin: "0 auto", minHeight: "inherit" }}
       >
-        <div className="max-w-3xl">
+        <div className="max-w-xl">
           <h1 className="font-sans font-semibold uppercase text-hero text-ink" style={{ lineHeight: 0.95 }}>
             Score every<br />cup.
           </h1>
@@ -40,6 +41,16 @@ export default function HeroSection() {
               Pricing
             </a>
           </div>
+        </div>
+
+        <div className="flex-shrink-0">
+          <Image
+            src="/three-beans.webp"
+            alt="Three coffee beans"
+            width={420}
+            height={420}
+            className="object-contain"
+          />
         </div>
       </div>
     </section>
