@@ -6,21 +6,18 @@ const steps = [
     title: "Log",
     description:
       "Start a cupping session in seconds. Add your coffees, origin, process, and roast details. Organise by date, farm, or variety.",
-    cta: "See the form →",
   },
   {
     step: "02",
     title: "Score",
     description:
       "Rate 10 SCA attributes with precision sliders. Add tasting notes, flavour tags, and defect counts as you cup.",
-    cta: "Try scoring →",
   },
   {
     step: "03",
     title: "Reflect",
     description:
       "Review your sessions over time. See your palate develop, compare coffees side by side. Export. Share. Improve.",
-    cta: "View dashboard →",
   },
 ];
 
@@ -61,12 +58,6 @@ export default function HowItWorks() {
               <p className="font-sans text-base text-ink leading-relaxed" style={{ opacity: 0.7 }}>
                 {step.description}
               </p>
-              <a
-                href="https://app.cuplog.app/sign-up"
-                className="inline-block font-sans text-sm font-semibold text-ink mt-6 border-b border-ink pb-0.5"
-              >
-                {step.cta}
-              </a>
             </div>
           ))}
         </div>
