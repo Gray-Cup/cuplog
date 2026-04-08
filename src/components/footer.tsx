@@ -53,16 +53,16 @@ export default function Footer() {
           </div>
 
           <div
-            className="border border-white/20 px-6 py-4 self-start"
+            className="border border-white/35 bg-white px-6 py-4 self-start"
             style={{ minWidth: "140px" }}
           >
             <p
-              className="font-sans font-bold text-xs text-white uppercase tracking-label"
+              className="font-sans font-bold text-xs text-black uppercase tracking-label"
               style={{ opacity: 0.4 }}
             >
               SCA Aligned
             </p>
-            <p className="font-sans text-xs text-white mt-1" style={{ opacity: 0.4 }}>
+            <p className="font-sans text-xs text-neutral-100 mt-1" style={{ opacity: 0.4 }}>
               Standard scoring
             </p>
           </div>
