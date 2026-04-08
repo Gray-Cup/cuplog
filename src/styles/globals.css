@@ -40,7 +40,7 @@
 /* ── Hero text size ── */
 @layer utilities {
   .text-hero {
-    font-size: clamp(4rem, 9vw, 8rem);
+    font-size: clamp(3rem, 7vw, 6rem);
     line-height: 0.95;
   }
 

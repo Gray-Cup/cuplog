@@ -3,11 +3,11 @@ import React from "react";
 export default function HeroSection() {
   return (
     <section
-      className="bg-peach border-b border-ink"
+      className="bg-green-200 border-b border-ink"
       style={{ minHeight: "85vh" }}
     >
       <div
-        className="flex flex-col justify-center px-6 md:px-12 py-24 md:py-32"
+        className="flex flex-col justify-center px-6 md:px-12 py-10"
         style={{ maxWidth: "1024px", margin: "0 auto", minHeight: "inherit" }}
       >
         <div className="max-w-3xl">

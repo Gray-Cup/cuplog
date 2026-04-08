@@ -55,11 +55,8 @@ export default function Nav() {
           style={{ maxWidth: "1024px", margin: "0 auto" }}
         >
           <nav className="flex gap-8">
-            <Link href="/#features" className="nav-link font-sans text-sm text-ink">
-              Features
-            </Link>
-            <Link href="/#how-it-works" className="nav-link font-sans text-sm text-ink">
-              How it Works
+            <Link href="https://graycup.org" target="_blank" className="nav-link font-sans text-sm text-ink">
+            Visit Gray Cup
             </Link>
             <Link href="/pricing" className="nav-link font-sans text-sm text-ink">
               Pricing
@@ -99,8 +96,7 @@ export default function Nav() {
 
           <nav className="flex flex-col gap-8 flex-1">
             {[
-              { href: "/#features", label: "Features" },
-              { href: "/#how-it-works", label: "How it Works" },
+              { href: "https://graycup.org", label: "Visit Gray Cup" },
               { href: "/pricing", label: "Pricing" },
               { href: "/about", label: "About" },
             ].map((link) => (

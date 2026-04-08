@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ManifestoText() {
   return (
-    <section className="bg-peach border-b border-ink">
+    <section className="bg-teal-400 border-b border-ink">
       <div
         className="px-6 md:px-10 py-24 md:py-32"
         style={{ maxWidth: "1024px", margin: "0 auto" }}

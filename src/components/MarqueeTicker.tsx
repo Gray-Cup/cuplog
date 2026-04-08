@@ -17,7 +17,7 @@ export default function MarqueeTicker() {
   const doubled = [...items, ...items];
 
   return (
-    <section className="bg-peach border-b border-ink overflow-hidden py-4">
+    <section className="bg-amber-400 border-b border-ink overflow-hidden py-4">
       <div className="marquee-track">
         {doubled.map((item, i) => (
           <span
