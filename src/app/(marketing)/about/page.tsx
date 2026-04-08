@@ -132,7 +132,7 @@ export default function AboutPage() {
               className="inline-flex items-center gap-2 font-sans font-semibold text-sm text-white bg-ink px-8 py-4 border border-ink"
               style={{ borderRadius: 0 }}
             >
-              Start for free →
+              Start Cupping (Test Mode)
             </a>
             <a
               href="/pricing"
