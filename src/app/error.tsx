@@ -1,26 +1,21 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import Link from "next/link";
-import { Terminal, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { useEffect } from "react"
+import Link from "next/link"
+import { Terminal, RefreshCw } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }) {
   useEffect(() => {
-    console.error(error);
-  }, [error]);
+    console.error(error)
+  }, [error])
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -46,9 +41,7 @@ export default function Error({
               <span>error_trace</span>
             </div>
             <div className="pl-6 text-sm text-muted-foreground">
-              <p className="truncate">
-                {error?.digest || "Unknown error occurred"}
-              </p>
+              <p className="truncate">{error?.digest || "Unknown error occurred"}</p>
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-muted-foreground">$</span>
@@ -60,22 +53,14 @@ export default function Error({
           </div>
         </CardContent>
         <CardFooter className="pt-6 border-t border-dashed mt-6 flex flex-col sm:flex-row flex-wrap gap-2">
-          <Button
-            variant="outline"
-            className="w-full rounded-none border-dashed"
-            onClick={reset}
-          >
+          <Button variant="outline" className="w-full rounded-none border-dashed" onClick={reset}>
             <RefreshCw className="mr-2 h-4 w-4" />$ system_restart
           </Button>
-          <Button
-            variant="outline"
-            className="w-full rounded-none border-dashed"
-            asChild
-          >
+          <Button variant="outline" className="w-full rounded-none border-dashed" asChild>
             <Link href="/">$ cd /home</Link>
           </Button>
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }

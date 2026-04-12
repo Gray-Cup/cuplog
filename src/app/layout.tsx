@@ -1,46 +1,33 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Instrument_Serif, Instrument_Sans } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import "@/styles/globals.css";
+import { cn } from "@/lib/utils";
+import RootProviders from "@/components/providers";
 
-const instrumentSerif = Instrument_Serif({
+const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const instrumentSans = Instrument_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
 });
 
+const fontMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+});
+
+const fontHeading = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cuplog.app"),
-  title: {
-    default: "CupLog — Score Every Sip",
-    template: "%s — CupLog",
-  },
-  description:
-    "The cupping log built for people who care what's in their cup. Track flavour, score sessions, and build your palate with SCA-standard scoring.",
+  title: "CupLog",
+  description: "SCA cup scoring, simplified.",
   icons: {
-    icon: "/favicon.ico",
-  },
-  openGraph: {
-    title: "CupLog — Score Every Sip",
-    description:
-      "The cupping log built for people who care what's in their cup. Track flavour, score sessions, and build your palate.",
-    type: "website",
-    url: "https://cuplog.app",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "CupLog — Score Every Sip",
-    description:
-      "The cupping log built for people who care what's in their cup.",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
@@ -50,12 +37,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${instrumentSerif.variable} ${instrumentSans.variable}`}
-    >
-      <body className="min-h-screen bg-paper font-sans antialiased">
-        {children}
+    <html lang="en">
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+          fontHeading.variable,
+          fontMono.variable
+        )}
+      >
+        <RootProviders>
+          {children}
+        </RootProviders>
       </body>
     </html>
   );

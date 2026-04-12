@@ -1,48 +1,35 @@
-import Link from "next/link";
-import Nav from "@/components/Nav";
-import Footer from "@/components/footer";
+"use client";
+
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Nav />
-      <main className="flex-1 flex flex-col items-center justify-center bg-paper px-6 py-24">
-        <p
-          className="font-sans font-bold text-xs text-ink uppercase tracking-label mb-6"
-          style={{ opacity: 0.4 }}
-        >
-          404
-        </p>
-        <h1
-          className="font-serif text-ink text-center"
-          style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: 0.95 }}
-        >
-          Page not found.
-        </h1>
-        <p
-          className="font-sans text-base text-ink mt-6 text-center"
-          style={{ maxWidth: "380px", opacity: 0.6 }}
-        >
-          This page doesn't exist. Head back and keep scoring.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 mt-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 font-sans font-semibold text-sm text-white bg-ink px-8 py-4 border border-ink"
-            style={{ borderRadius: 0 }}
-          >
-            ← Back to Home
-          </Link>
-          <a
-            href="https://app.cuplog.app/sign-up"
-            className="inline-flex items-center gap-2 font-sans font-semibold text-sm text-ink bg-white px-8 py-4 border border-ink"
-            style={{ borderRadius: 0 }}
-          >
-            Start Cupping →
-          </a>
+    <div className="w-full max-w-7xl mx-auto px-4 lg:px-6 h-auto overflow-y-auto md:overflow-hidden my-15 flex flex-col items-center justify-center">
+      <div className="text-center my-16">
+        <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-neutral-100 mb-6">
+          <span className="text-4xl font-bold text-neutral-400">404</span>
         </div>
-      </main>
-      <Footer />
+        
+        <h1 className="text-3xl font-semibold text-neutral-800 mb-4">Page not found</h1>
+        
+        <p className="text-md text-muted-foreground max-w-md mx-auto mb-8">
+          Sorry, we couldn't find the page you're looking for. It might have been moved or deleted.
+        </p>
+        
+        <div className="border-r border-neutral-100 bg-neutral-100 h-10 w-0.75 my-8 mx-auto"></div>
+        
+        <Button 
+          className="bg-[#4285F4] hover:bg-[#3B78E7] text-white border-none"
+          asChild
+        >
+          <Link href="/" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Link>
+        </Button>
+      </div>
     </div>
-  );
+  )
 }
