@@ -26,7 +26,7 @@ export function MarketingNavButtons() {
             <Link href="/sign-in" className="flex text-muted-foreground text-sm font-medium items-center">
               <span>Sign In</span>
             </Link>
-            <Link href="/sign-up" className="flex text-sm font-medium py-1.5 px-3.5 items-center text-white bg-[#F6471A] hover:bg-[#F6471A]/93 transition-colors rounded-full">
+            <Link href="/sign-up" className="flex text-sm font-medium py-1.5 px-3.5 items-center text-white bg-blue-500 hover:bg-blue-600 transition-colors rounded-full">
               <span>Sign Up</span>
             </Link>
         </>

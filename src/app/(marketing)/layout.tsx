@@ -83,34 +83,3 @@ const GitHubWidget = ({ repo, stars }: { repo: string; stars: string }) => {
     </div>
   );
 };
-
-const CupLogMark = () => {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Cup body */}
-      <path
-        d="M4 8h20l-2 12H6L4 8z"
-        fill="#171717"
-      />
-      {/* Cup handle */}
-      <path
-        d="M24 10h2a2 2 0 0 1 0 4h-2"
-        stroke="#171717"
-        strokeWidth="2"
-        strokeLinecap="square"
-      />
-      {/* Saucer */}
-      <rect x="2" y="21" width="24" height="2" fill="#171717" />
-      {/* Steam lines */}
-      <path d="M10 5V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-      <path d="M14 6V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-      <path d="M18 5V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  );
-};

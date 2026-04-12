@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { signIn, signUp } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
@@ -52,73 +51,53 @@ export default function AuthCard({ mode = "sign-in" }: { mode?: "sign-in" | "sig
   };
 
   return (
-    <div className="flex items-center justify-center w-full min-h-[60vh] px-4">
-      <div className="w-full max-w-sm border border-neutral-200 bg-white">
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-2 pt-6 pb-1">
-          <CupLogMark />
-          <span className="font-bold text-lg font-heading">CupLog</span>
-        </div>
-
-        <div className="px-6 pt-3 pb-1 text-center">
-          <h1 className="text-base font-semibold text-neutral-800">
-            {mode === "sign-in" ? "Sign in to your account" : "Create your account"}
+    <div className="flex items-center justify-center w-full px-4">
+      <div className="w-full max-w-[320px] bg-white rounded-[8px] shadow-sm">
+        <div className="px-5 pt-4 pb-0 text-center">
+          <h1 className="text-sm font-semibold text-neutral-800">
+            {mode === "sign-in" ? "Sign in" : "Create account"}
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {mode === "sign-in"
-              ? "Welcome back. Enter your credentials to continue."
-              : "Start cupping with SCA-standard scoring."}
-          </p>
         </div>
 
-        <form onSubmit={handleEmailSubmit} className="px-6 pt-3 pb-5 space-y-3">
+        <form onSubmit={handleEmailSubmit} className="px-5 pt-3 pb-4 space-y-2">
           {mode === "sign-up" && (
-            <div className="space-y-1.5">
-              <Label htmlFor="name" className="text-sm">Name</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="border-neutral-200"
-                autoComplete="name"
-              />
-            </div>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="border-neutral-200"
+              autoComplete="name"
+            />
           )}
 
-          <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-sm">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="border-neutral-200"
-              autoComplete="email"
-            />
-          </div>
+          <Input
+            id="email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="border-neutral-200"
+            autoComplete="email"
+          />
 
-          <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-sm">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder={mode === "sign-up" ? "At least 8 characters" : "Your password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-              className="border-neutral-200"
-              autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
-            />
-          </div>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={8}
+            className="border-neutral-200"
+            autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
+          />
 
           {error && (
-            <p className="text-xs text-red-600 bg-red-50 border border-red-100 px-3 py-2">
+            <p className="text-xs text-red-600 bg-red-50 border border-red-100 rounded-[6px] px-3 py-2">
               {error}
             </p>
           )}
@@ -137,18 +116,16 @@ export default function AuthCard({ mode = "sign-in" }: { mode?: "sign-in" | "sig
             )}
           </Button>
 
-          {/* Divider */}
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-neutral-200" />
             <span className="text-xs text-muted-foreground">or</span>
             <div className="flex-1 h-px bg-neutral-200" />
           </div>
 
-          {/* Google */}
           <Button
             type="button"
             variant="outline"
-            className={cn("w-full gap-2 border-neutral-200", googleLoading && "opacity-70")}
+            className={cn("w-full border-neutral-200", googleLoading && "opacity-70")}
             disabled={googleLoading || emailLoading}
             onClick={handleGoogle}
           >
@@ -157,24 +134,23 @@ export default function AuthCard({ mode = "sign-in" }: { mode?: "sign-in" | "sig
           </Button>
         </form>
 
-        {/* Footer */}
-        <div className="border-t border-neutral-100 px-6 py-3 text-center text-xs text-muted-foreground">
+        <div className="border-t border-neutral-100 px-5 py-2.5 text-center text-xs text-muted-foreground">
           {mode === "sign-in" ? (
             <>
-              Don&apos;t have an account?{" "}
+              No account?{" "}
               <Link href="/sign-up" className="text-primary font-medium hover:underline">
                 Sign up
               </Link>
             </>
           ) : (
             <>
-              Already have an account?{" "}
+              Have an account?{" "}
               <Link href="/sign-in" className="text-primary font-medium hover:underline">
                 Sign in
               </Link>
             </>
           )}
-          <p className="mt-2 text-neutral-400">
+          <p className="mt-1.5 text-xs text-neutral-400">
             By continuing you agree to our{" "}
             <Link href="/terms" className="hover:underline">Terms</Link>
             {" & "}
@@ -185,14 +161,3 @@ export default function AuthCard({ mode = "sign-in" }: { mode?: "sign-in" | "sig
     </div>
   );
 }
-
-const CupLogMark = () => (
-  <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 8h20l-2 12H6L4 8z" fill="#171717" />
-    <path d="M24 10h2a2 2 0 0 1 0 4h-2" stroke="#171717" strokeWidth="2" strokeLinecap="square" />
-    <rect x="2" y="21" width="24" height="2" fill="#171717" />
-    <path d="M10 5V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-    <path d="M14 6V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-    <path d="M18 5V3" stroke="#171717" strokeWidth="1.5" strokeLinecap="square" />
-  </svg>
-);
