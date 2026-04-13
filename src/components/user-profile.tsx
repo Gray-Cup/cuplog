@@ -67,13 +67,13 @@ export function UserProfile({ className }: { className?: string }) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <a href="https://github.com/rahul-kumar-v" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between gap-2">
+          <a href="https://github.com/Gray-Cup/cuplog" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between gap-2">
             <span>Github</span>
             <ExternalLinkIcon className="size-4" />
           </a>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <a href="https://x.com/rahul_kumar_v" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between gap-2">
+          <a href="https://x.com/arjunaditya_" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-between gap-2">
             <span>X</span>
             <ExternalLinkIcon className="size-4" />
           </a>

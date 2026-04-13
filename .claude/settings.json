@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ':*)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' 'https://s3.bucket0.com/cuplog-dev?list-type=2' --aws-sigv4 aws:amz:auto:s3 --user B0IA6KXT7KAQSBTC7HGI:U9upsFU31pnrF9kBW0JwoWBAGbVOserdj7ZUqcFD)",
+      "Bash(curl -s 'https://s3.bucket0.com/cuplog-dev?list-type=2' --aws-sigv4 aws:amz:auto:s3 --user B0IA6KXT7KAQSBTC7HGI:U9upsFU31pnrF9kBW0JwoWBAGbVOserdj7ZUqcFD)"
+    ]
+  }
+}

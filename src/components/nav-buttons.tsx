@@ -33,12 +33,12 @@ export function DashboardNavButtons() {
   return (
     <>
       <div className="h-full border-l border-dashed">
-        <a href="https://x.com/rahul_kumar_v" target="_blank" className="flex items-center">
+        <a href="https://x.com/arjunaditya_" target="_blank" className="flex items-center">
           <span>X</span>
         </a>
       </div>
       <div className="h-full border-l border-dashed">
-        <a href="https://github.com/rahul-kumar-v" target="_blank" className="flex items-center">
+        <a href="https://github.com/Gray-Cup/cuplog target="_blank" className="flex items-center">
           <span>Github</span>
         </a>
       </div>
