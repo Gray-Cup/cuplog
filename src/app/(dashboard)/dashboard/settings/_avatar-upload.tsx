@@ -7,28 +7,7 @@ import { toast } from "sonner";
 import { updateUserImage } from "./actions";
 import { useSession } from "@/lib/auth-client";
 import { CropModal } from "./_crop-modal";
-
-async function uploadBlob(blob: Blob, name: string): Promise<string> {
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      filename: name,
-      contentType: "image/webp",
-      purpose: "profile",
-    }),
-  });
-  if (!res.ok) throw new Error("Failed to get upload URL");
-  const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
-
-  await fetch(uploadUrl, {
-    method: "PUT",
-    headers: { "Content-Type": "image/webp" },
-    body: blob,
-  });
-
-  return publicUrl;
-}
+import { useUploadThing } from "@/lib/uploadthing";
 
 export function AvatarUpload({
   currentImage,
@@ -42,6 +21,7 @@ export function AvatarUpload({
   const [preview, setPreview] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const { refetch } = useSession();
+  const { startUpload } = useUploadThing("profileImage");
 
   function handleFileSelect(file: File) {
     const objectUrl = URL.createObjectURL(file);
@@ -58,7 +38,10 @@ export function AvatarUpload({
 
     startTransition(async () => {
       try {
-        const url = await uploadBlob(blob, "avatar.webp");
+        const file = new File([blob], "avatar.webp", { type: "image/webp" });
+        const uploaded = await startUpload([file]);
+        if (!uploaded?.[0]) throw new Error("Upload failed");
+        const url = uploaded[0].ufsUrl;
         await updateUserImage(url);
         await refetch();
         URL.revokeObjectURL(previewUrl);

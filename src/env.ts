@@ -11,10 +11,8 @@ export const env = createEnv({
     // Google
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
-    // Bucket0 S3 (required for file uploads)
-    BUCKET0_ACCESS_KEY_ID: z.string().min(1).optional(),
-    BUCKET0_SECRET_ACCESS_KEY: z.string().min(1).optional(),
-    BUCKET0_BUCKET_NAME: z.string().min(1).optional(),
+    // UploadThing (required for file uploads)
+    UPLOADTHING_TOKEN: z.string().min(1),
   },
   client: {},
   experimental__runtimeEnv: {},

@@ -12,6 +12,7 @@ import {
   saveCuppingSession,
   deleteSample,
 } from "./actions";
+import { useUploadThing } from "@/lib/uploadthing";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -94,28 +95,6 @@ function scoreTier(score: number): { label: string; className: string } {
   return { label: "Not specialty", className: "text-neutral-400" };
 }
 
-async function uploadFile(file: File, purpose: "profile" | "sample"): Promise<string> {
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      filename: file.name,
-      contentType: file.type,
-      purpose,
-    }),
-  });
-  if (!res.ok) throw new Error("Failed to get upload URL");
-  const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
-
-  await fetch(uploadUrl, {
-    method: "PUT",
-    headers: { "Content-Type": file.type },
-    body: file,
-  });
-
-  return publicUrl;
-}
-
 // ─── Photo Upload Component ───────────────────────────────────────────────────
 
 function PhotoUploader({
@@ -127,6 +106,7 @@ function PhotoUploader({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const { startUpload } = useUploadThing("samplePhoto");
 
   async function handleFiles(files: FileList | null) {
     if (!files) return;
@@ -136,7 +116,9 @@ function PhotoUploader({
 
     setUploading(true);
     try {
-      const urls = await Promise.all(toUpload.map((f) => uploadFile(f, "sample")));
+      const uploaded = await startUpload(toUpload);
+      if (!uploaded) throw new Error("Upload failed");
+      const urls = uploaded.map((f) => f.ufsUrl);
       onChange([...photos, ...urls]);
     } catch {
       toast.error("Failed to upload photo");
