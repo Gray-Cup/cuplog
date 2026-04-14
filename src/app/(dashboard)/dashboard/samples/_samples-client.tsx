@@ -281,7 +281,7 @@ export function SamplesClient({ initialSamples }: { initialSamples: SampleRow[] 
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-8">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -514,7 +514,7 @@ function CuppingForm({
   const photos = (s.photos ?? []) as string[];
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-8 space-y-10">
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-10">
       {/* Header */}
       <div className="flex items-start justify-between gap-6">
         <div>

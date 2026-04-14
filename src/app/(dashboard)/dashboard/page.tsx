@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   const [user, stats] = await Promise.all([getUser(), getDashboardStats()]);
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-8 space-y-10">
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
