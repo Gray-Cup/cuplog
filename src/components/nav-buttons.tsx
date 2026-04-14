@@ -38,7 +38,7 @@ export function DashboardNavButtons() {
         </a>
       </div>
       <div className="h-full border-l border-dashed">
-        <a href="https://github.com/Gray-Cup/cuplog target="_blank" className="flex items-center">
+        <a href="https://github.com/Gray-Cup/cuplog" target="_blank" className="flex items-center">
           <span>Github</span>
         </a>
       </div>
