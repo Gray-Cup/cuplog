@@ -50,7 +50,6 @@ export function UserProfile({ className }: { className?: string }) {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col">
               <p className="font-medium leading-none">{session.user.name}</p>
-              <p className="text-sm text-muted-foreground">{session.user.email}</p>
             </div>
             <Avatar className="size-8">
               <AvatarImage src={session.user.image ?? ""} alt={session.user.name ?? ""} className="rounded-full" />
