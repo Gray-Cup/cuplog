@@ -1,16 +1,35 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { UserProfile } from "@/components/user-profile";
 import { useSession } from "@/lib/auth-client";
 
+const SESSION_CACHE_KEY = "cl_session_state";
+
 export function MarketingNavButtons() {
   const { data: session, isPending } = useSession();
+  const [cached, setCached] = useState<"in" | "out" | null>(null);
+
+  useEffect(() => {
+    const val = localStorage.getItem(SESSION_CACHE_KEY);
+    if (val === "in" || val === "out") setCached(val);
+  }, []);
+
+  useEffect(() => {
+    if (!isPending) {
+      const next = session ? "in" : "out";
+      localStorage.setItem(SESSION_CACHE_KEY, next);
+      setCached(next);
+    }
+  }, [isPending, session]);
+
+  // Use resolved session truth, fall back to cache, default to "out" if no cache
+  const displayState = !isPending ? (session ? "in" : "out") : (cached ?? "out");
 
   return (
     <>
-      {!isPending && (session ? (
+      {displayState === "in" ? (
         <Link href="/dashboard" className="flex text-sm font-medium py-1.5 px-3.5 items-center text-white bg-neutral-900 hover:bg-neutral-700 transition-colors rounded-full">
           Dashboard
         </Link>
@@ -23,7 +42,7 @@ export function MarketingNavButtons() {
             Sign Up
           </Link>
         </>
-      ))}
+      )}
       <UserProfile className="size-9" />
     </>
   );
