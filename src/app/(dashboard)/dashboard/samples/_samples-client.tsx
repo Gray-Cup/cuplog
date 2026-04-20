@@ -44,13 +44,13 @@ type Scores = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SCA_ATTRS = [
-  { key: "fragrance", label: "Fragrance / Aroma" },
-  { key: "flavor", label: "Flavor" },
-  { key: "aftertaste", label: "Aftertaste" },
-  { key: "acidity", label: "Acidity" },
-  { key: "body", label: "Body" },
-  { key: "balance", label: "Balance" },
-  { key: "overall", label: "Overall" },
+  { key: "fragrance", label: "Fragrance / Aroma", color: "#7C3AED" },
+  { key: "flavor", label: "Flavor", color: "#D97706" },
+  { key: "aftertaste", label: "Aftertaste", color: "#E11D48" },
+  { key: "acidity", label: "Acidity", color: "#16A34A" },
+  { key: "body", label: "Body", color: "#2563EB" },
+  { key: "balance", label: "Balance", color: "#0D9488" },
+  { key: "overall", label: "Overall", color: "#EA580C" },
 ] as const;
 
 const PER_CUP = [
@@ -330,9 +330,11 @@ function DescriptorChip({ descriptor, onRemove }: { descriptor: DescriptorTag; o
 function DescriptorPicker({
   descriptors,
   onChange,
+  buttonLabel = "Add descriptors",
 }: {
   descriptors: DescriptorTag[];
   onChange: (d: DescriptorTag[]) => void;
+  buttonLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -404,7 +406,7 @@ function DescriptorPicker({
         className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-800 border border-dashed border-neutral-300 hover:border-neutral-400 rounded-full px-3 py-1 transition-colors"
       >
         <Plus className="size-3" />
-        Add flavor note
+        {buttonLabel}
         <ChevronDown className="size-3 opacity-60" />
       </button>
 
@@ -689,6 +691,92 @@ function SampleCard({
   );
 }
 
+// ─── Score Slider Card ────────────────────────────────────────────────────────
+
+function ScoreSliderCard({
+  label,
+  color,
+  value,
+  onChange,
+  descriptors,
+  onDescriptorsChange,
+}: {
+  label: string;
+  color: string;
+  value: string;
+  onChange: (v: string) => void;
+  descriptors: DescriptorTag[];
+  onDescriptorsChange: (d: DescriptorTag[]) => void;
+}) {
+  const isSet = value !== "" && !isNaN(parseFloat(value));
+  const numVal = isSet ? parseFloat(value) : null;
+  const sliderVal = isSet ? numVal! : 6;
+  const pct = ((sliderVal - 6) / (10 - 6)) * 100;
+
+  return (
+    <div
+      className="bg-white rounded-2xl p-4 transition-all border flex flex-col gap-3"
+      style={{ borderColor: isSet ? color + "40" : "#f3f4f6" }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold text-neutral-800 leading-tight">{label}</span>
+        <span
+          className="font-mono font-bold text-lg leading-none tabular-nums transition-colors"
+          style={{ color: isSet ? color : "#d1d5db" }}
+        >
+          {isSet ? numVal!.toFixed(2) : "—"}
+        </span>
+      </div>
+
+      {/* Descriptor picker */}
+      <div>
+        {descriptors.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-2">
+            {descriptors.map((d) => (
+              <DescriptorChip key={d.id} descriptor={d} onRemove={() => onDescriptorsChange(descriptors.filter((x) => x.id !== d.id))} />
+            ))}
+          </div>
+        )}
+        <DescriptorPicker descriptors={descriptors} onChange={onDescriptorsChange} />
+      </div>
+
+      {/* Slider */}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 flex items-center w-full pointer-events-none">
+          <div className="h-1.5 w-full rounded-full bg-neutral-100">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{
+                width: isSet ? `${pct}%` : "0%",
+                background: `linear-gradient(90deg, ${color}90, ${color})`,
+              }}
+            />
+          </div>
+        </div>
+        <input
+          type="range"
+          min={6}
+          max={10}
+          step={0.25}
+          value={sliderVal}
+          onChange={(e) => onChange(e.target.value)}
+          className="relative w-full appearance-none bg-transparent cursor-pointer h-5"
+          style={{ "--thumb-color": color } as React.CSSProperties}
+        />
+      </div>
+
+      <div className="flex justify-between -mt-1">
+        {[6, 7, 8, 9, 10].map((v) => (
+          <span key={v} className="text-[10px] font-mono" style={{ color: isSet && numVal! >= v ? color + "99" : "#d1d5db" }}>
+            {v}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Cupping Form ─────────────────────────────────────────────────────────────
 
 function CuppingForm({
@@ -717,9 +805,14 @@ function CuppingForm({
     (a) => scores[a.key] !== "" && !isNaN(parseFloat(scores[a.key]))
   );
   const familyCounts = useMemo(() => computeFamilyCounts(descriptors), [descriptors]);
-  const topNotes = descriptors.slice(0, 3);
+  const topNotes = descriptors.slice(0, 4);
   const tier = liveScore ? scoreTier(liveScore) : null;
   const photos = (s.photos ?? []) as string[];
+
+  function handleAttrDesc(attrKey: string, newTags: DescriptorTag[]) {
+    const tagged = newTags.map((t) => ({ ...t, attrKey }));
+    onDescriptorsChange([...descriptors.filter((d) => d.attrKey !== attrKey), ...tagged]);
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
@@ -751,50 +844,44 @@ function CuppingForm({
             )}
           </div>
 
-          {/* Mobile: score preview */}
-          <div className="lg:hidden flex items-center gap-4 p-4 bg-neutral-50 rounded-xl">
-            <FlavorWheel familyCounts={familyCounts} size={80} showLabels={false} />
-            <div>
-              <p className="text-xs text-neutral-400 mb-0.5">Live score</p>
-              <p className="font-mono font-bold text-3xl text-neutral-900 leading-none">
+          {/* Flavor Wheel Banner */}
+          <div className="flex items-center gap-5 bg-neutral-50 rounded-2xl p-5">
+            <FlavorWheel familyCounts={familyCounts} size={96} showLabels={false} />
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wide mb-1">Live Score</p>
+              <p className="font-mono font-bold text-4xl text-neutral-900 leading-none tabular-nums">
                 {liveScore !== null ? liveScore.toFixed(2) : "—"}
               </p>
               {tier && (
-                <p className="text-xs font-semibold mt-1" style={{ color: tier.color }}>{tier.label}</p>
+                <p className="text-xs font-semibold mt-1.5" style={{ color: tier.color }}>{tier.label}</p>
               )}
             </div>
+            {topNotes.length > 0 && (
+              <div className="hidden sm:flex flex-wrap gap-1.5 justify-end max-w-[160px]">
+                {topNotes.map((d) => (
+                  <DescriptorChip key={d.id} descriptor={d} />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* SCA Attributes */}
           <div>
             <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-4">SCA Attributes</p>
-            <div className="divide-y divide-neutral-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {SCA_ATTRS.map((attr) => (
-                <div key={attr.key} className="flex items-center justify-between py-3">
-                  <label className="text-sm text-neutral-700">{attr.label}</label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="number"
-                      min={6}
-                      max={10}
-                      step={0.25}
-                      placeholder="—"
-                      value={scores[attr.key as keyof Scores]}
-                      onChange={(e) => onChange(attr.key as keyof Scores, e.target.value)}
-                      className="h-8 w-20 text-right font-mono text-sm border-neutral-200"
-                    />
-                    <span className="text-xs text-neutral-300 w-6">/ 10</span>
-                  </div>
-                </div>
+                <ScoreSliderCard
+                  key={attr.key}
+                  label={attr.label}
+                  color={attr.color}
+                  value={scores[attr.key as keyof Scores]}
+                  onChange={(v) => onChange(attr.key as keyof Scores, v)}
+                  descriptors={descriptors.filter((d) => d.attrKey === attr.key)}
+                  onDescriptorsChange={(tags) => handleAttrDesc(attr.key, tags)}
+                />
               ))}
             </div>
-            <p className="text-[11px] text-neutral-400 mt-2">6.00 – 10.00 in 0.25 increments.</p>
-          </div>
-
-          {/* Descriptors */}
-          <div>
-            <p className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3">Flavor Notes</p>
-            <DescriptorPicker descriptors={descriptors} onChange={onDescriptorsChange} />
+            <p className="text-[11px] text-neutral-400 mt-3">6.00 – 10.00 in 0.25 increments. Drag to score.</p>
           </div>
 
           {/* Per-Cup Checks */}
@@ -879,83 +966,40 @@ function CuppingForm({
           </div>
         </div>
 
-        {/* ── Right: live preview panel ── */}
-        <div className="hidden lg:block">
-          <div className="sticky top-6 space-y-5">
-            {/* Flavor wheel */}
-            <div className="bg-neutral-50 rounded-2xl p-5 flex flex-col items-center gap-4">
-              <FlavorWheel
-                familyCounts={familyCounts}
-                size={220}
-                showLabels={true}
-              />
-
-              {/* Top notes */}
-              {topNotes.length > 0 && (
-                <div className="w-full">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-400 mb-2 text-center">
-                    Top Notes
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 justify-center">
-                    {topNotes.map((d) => (
-                      <DescriptorChip key={d.id} descriptor={d} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Live score */}
-              <div className="w-full pt-3 border-t border-neutral-200 text-center">
-                <p className="text-[10px] text-neutral-400 uppercase tracking-wide mb-1">Final Score</p>
-                <p className="font-mono font-bold text-4xl text-neutral-900 leading-none">
-                  {liveScore !== null ? liveScore.toFixed(2) : "—"}
-                </p>
-                {tier && (
-                  <p className="text-xs font-semibold mt-1.5" style={{ color: tier.color }}>
-                    {tier.label}
-                  </p>
-                )}
+        {/* ── Right: export panel ── */}
+        {liveScore !== null && (
+          <div className="hidden lg:block">
+            <div className="sticky top-6 space-y-2">
+              <p className="text-[10px] text-neutral-400 uppercase tracking-wide text-center">Export</p>
+              <div className="flex gap-2">
+                <button
+                  onClick={async () => {
+                    if (!exportCardRef.current) return;
+                    toast.promise(downloadPNG(exportCardRef.current, `${s.name}.png`), {
+                      loading: "Generating PNG…", success: "Downloaded!", error: "Export failed",
+                    });
+                  }}
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs text-neutral-600 border border-neutral-200 rounded-lg h-8 hover:bg-neutral-50 transition-colors"
+                >
+                  <Download className="size-3" />
+                  PNG
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!exportCardRef.current) return;
+                    toast.promise(downloadPDF(exportCardRef.current, `${s.name}.pdf`), {
+                      loading: "Generating PDF…", success: "Downloaded!", error: "Export failed",
+                    });
+                  }}
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs text-neutral-600 border border-neutral-200 rounded-lg h-8 hover:bg-neutral-50 transition-colors"
+                >
+                  <Download className="size-3" />
+                  PDF
+                </button>
               </div>
             </div>
-
-            {/* Export buttons (only if score is ready) */}
-            {liveScore !== null && (
-              <div className="space-y-2">
-                <p className="text-[10px] text-neutral-400 uppercase tracking-wide text-center">Export Preview</p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={async () => {
-                      if (!exportCardRef.current) return;
-                      toast.promise(downloadPNG(exportCardRef.current, `${s.name}.png`), {
-                        loading: "Generating PNG…",
-                        success: "Downloaded!",
-                        error: "Export failed",
-                      });
-                    }}
-                    className="flex-1 flex items-center justify-center gap-1.5 text-xs text-neutral-600 border border-neutral-200 rounded-lg h-8 hover:bg-neutral-50 transition-colors"
-                  >
-                    <Download className="size-3" />
-                    PNG
-                  </button>
-                  <button
-                    onClick={async () => {
-                      if (!exportCardRef.current) return;
-                      toast.promise(downloadPDF(exportCardRef.current, `${s.name}.pdf`), {
-                        loading: "Generating PDF…",
-                        success: "Downloaded!",
-                        error: "Export failed",
-                      });
-                    }}
-                    className="flex-1 flex items-center justify-center gap-1.5 text-xs text-neutral-600 border border-neutral-200 rounded-lg h-8 hover:bg-neutral-50 transition-colors"
-                  >
-                    <Download className="size-3" />
-                    PDF
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

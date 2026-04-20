@@ -2,11 +2,13 @@ export type DescriptorTag = {
   id: string;
   label: string;
   family: string;
+  attrKey?: string;
 };
 
 export type StoredDescriptor = {
   label: string;
   family: string;
+  attrKey?: string;
 };
 
 export type DescriptorFamilyDef = {
@@ -122,5 +124,5 @@ export function computeFamilyCounts(descriptors: { family: string }[]): Record<s
 }
 
 export function parseStoredDescriptors(raw: StoredDescriptor[]): DescriptorTag[] {
-  return raw.map((d, i) => ({ ...d, id: `stored-${i}-${d.label}` }));
+  return raw.map((d, i) => ({ ...d, id: `stored-${i}-${d.label}`, attrKey: d.attrKey }));
 }
