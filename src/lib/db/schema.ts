@@ -79,7 +79,7 @@ export const sample = pgTable("sample", {
   faults: text("faults"),
   notes: text("notes"),
   descriptors: jsonb("descriptors")
-    .$type<{ label: string; family: string }[]>()
+    .$type<{ label: string; family: string; attrKey?: string }[]>()
     .default(sql`'[]'::jsonb`)
     .notNull(),
   finalScore: text("final_score"),

@@ -12,14 +12,12 @@ import { toast } from "sonner";
 import type { SampleRow } from "./actions";
 import { createSample, saveCuppingSession, deleteSample } from "./actions";
 import { useUploadThing } from "@/lib/uploadthing";
-import { FlavorWheel } from "@/components/flavor-wheel";
 import {
   DESCRIPTOR_FAMILIES,
   type DescriptorTag,
   type StoredDescriptor,
   chipClasses,
   familyColor,
-  computeFamilyCounts,
   parseStoredDescriptors,
 } from "@/lib/descriptors";
 
@@ -156,9 +154,7 @@ function ExportCard({
   descriptors: DescriptorTag[];
   liveScore: number | null;
 }) {
-  const familyCounts = useMemo(() => computeFamilyCounts(descriptors), [descriptors]);
   const finalScore = liveScore ?? (s.finalScore ? parseFloat(s.finalScore) : null);
-  const topDescriptors = descriptors.slice(0, 6);
   const date = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
   const tier = finalScore ? scoreTier(finalScore) : null;
 
@@ -190,34 +186,6 @@ function ExportCard({
           </p>
         </div>
 
-        {/* Flavor Wheel */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-          <FlavorWheel familyCounts={familyCounts} descriptors={topDescriptors} size={200} showLabels={true} />
-        </div>
-
-        {/* Descriptors */}
-        {topDescriptors.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 24 }}>
-            {topDescriptors.map((d) => (
-              <span
-                key={d.id}
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  padding: "3px 10px",
-                  borderRadius: 999,
-                  border: "1px solid",
-                  borderColor: familyColor(d.family) + "40",
-                  backgroundColor: familyColor(d.family) + "18",
-                  color: familyColor(d.family),
-                }}
-              >
-                {d.label}
-              </span>
-            ))}
-          </div>
-        )}
-
         {/* Score */}
         {finalScore !== null && (
           <div style={{ textAlign: "center", padding: "20px 0", borderTop: "1px solid #f3f4f6", borderBottom: "1px solid #f3f4f6" }}>
@@ -236,20 +204,81 @@ function ExportCard({
         )}
 
         {/* SCA breakdown */}
-        <div style={{ marginTop: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 24px" }}>
+        <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
           {SCA_ATTRS.map((attr) => {
             const val = scores[attr.key as keyof Scores];
             if (!val) return null;
+            const num = parseFloat(val);
+            const pct = ((num - 6) / 4) * 100;
+            const attrNotes = descriptors.filter((d) => d.attrKey === attr.key);
             return (
-              <div key={attr.key} style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 11, color: "#6b7280" }}>{attr.label}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#111827", fontVariantNumeric: "tabular-nums" }}>
-                  {parseFloat(val).toFixed(2)}
-                </span>
+              <div key={attr.key}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                  <span style={{ fontSize: 11, color: "#6b7280" }}>{attr.label}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: attr.color, fontVariantNumeric: "tabular-nums" }}>
+                    {num.toFixed(2)}
+                  </span>
+                </div>
+                <div style={{ height: 4, borderRadius: 999, background: "#f3f4f6", overflow: "hidden", marginBottom: attrNotes.length ? 6 : 0 }}>
+                  <div style={{ height: "100%", borderRadius: 999, width: `${pct}%`, background: attr.color }} />
+                </div>
+                {attrNotes.length > 0 && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                    {attrNotes.map((d) => (
+                      <span
+                        key={d.id}
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 600,
+                          padding: "2px 8px",
+                          borderRadius: 999,
+                          border: "1px solid",
+                          borderColor: familyColor(d.family) + "40",
+                          backgroundColor: familyColor(d.family) + "18",
+                          color: familyColor(d.family),
+                        }}
+                      >
+                        {d.label}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
+
+        {/* Fallback: show any descriptors without attrKey (legacy data saved before attrKey was persisted) */}
+        {(() => {
+          const unattached = descriptors.filter((d) => !d.attrKey);
+          if (!unattached.length) return null;
+          return (
+            <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid #f3f4f6" }}>
+              <p style={{ fontSize: 10, color: "#9ca3af", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>
+                Flavour Notes
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                {unattached.map((d) => (
+                  <span
+                    key={d.id}
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 600,
+                      padding: "2px 8px",
+                      borderRadius: 999,
+                      border: "1px solid",
+                      borderColor: familyColor(d.family) + "40",
+                      backgroundColor: familyColor(d.family) + "18",
+                      color: familyColor(d.family),
+                    }}
+                  >
+                    {d.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
@@ -557,7 +586,6 @@ function SampleCard({
   const exportRef = useRef<HTMLDivElement>(null);
   const photos = (s.photos ?? []) as string[];
   const descriptors = sampleDescriptors(s);
-  const familyCounts = useMemo(() => computeFamilyCounts(descriptors), [descriptors]);
   const topDescriptors = descriptors.slice(0, 3);
   const finalScore = s.finalScore ? parseFloat(s.finalScore) : null;
   const tier = finalScore ? scoreTier(finalScore) : null;
@@ -622,11 +650,6 @@ function SampleCard({
 
         {/* Right: wheel + score + actions */}
         <div className="flex flex-col items-end gap-2 shrink-0">
-          {/* Mini wheel (only if complete) */}
-          {s.status === "complete" && (
-            <FlavorWheel familyCounts={familyCounts} size={72} showLabels={false} />
-          )}
-
           {finalScore !== null && tier && (
             <div className="text-right">
               <p className="font-mono font-bold text-xl text-neutral-900 leading-none">
@@ -649,7 +672,17 @@ function SampleCard({
                 <FlaskConical className="size-3.5" />
                 Start Cupping
               </Button>
-            ) : (
+            ) : s.status === "complete" && (
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 text-xs gap-1.5 text-neutral-400 hover:text-neutral-700 border-neutral-200"
+                onClick={onStartCupping}
+              >
+                Edit Session
+              </Button>
+            )}
+            {s.status === "complete" && (
               <div ref={exportRef} className="relative">
                 <Button
                   size="sm"
@@ -808,8 +841,6 @@ function CuppingForm({
   const allAttrsFilled = SCA_ATTRS.every(
     (a) => scores[a.key] !== "" && !isNaN(parseFloat(scores[a.key]))
   );
-  const familyCounts = useMemo(() => computeFamilyCounts(descriptors), [descriptors]);
-  const topNotes = descriptors.slice(0, 4);
   const tier = liveScore ? scoreTier(liveScore) : null;
   const photos = (s.photos ?? []) as string[];
 
@@ -848,25 +879,66 @@ function CuppingForm({
             )}
           </div>
 
-          {/* Flavor Wheel Banner */}
-          <div className="flex items-center gap-5 bg-neutral-50 rounded-2xl p-5">
-            <FlavorWheel familyCounts={familyCounts} descriptors={descriptors} size={96} showLabels={false} />
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] text-neutral-400 uppercase tracking-wide mb-1">Live Score</p>
-              <p className="font-mono font-bold text-4xl text-neutral-900 leading-none tabular-nums">
+          {/* Session Summary */}
+          <div className="bg-neutral-50 rounded-2xl p-5 space-y-4">
+            {/* Score */}
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono font-bold text-4xl text-neutral-900 leading-none tabular-nums">
                 {liveScore !== null ? liveScore.toFixed(2) : "—"}
-              </p>
-              {tier && (
-                <p className="text-xs font-semibold mt-1.5" style={{ color: tier.color }}>{tier.label}</p>
-              )}
+              </span>
+              {tier && <span className="text-sm font-semibold" style={{ color: tier.color }}>{tier.label}</span>}
+              <span className="text-[10px] text-neutral-400 uppercase tracking-wide ml-auto">Live Score</span>
             </div>
-            {topNotes.length > 0 && (
-              <div className="hidden sm:flex flex-wrap gap-1.5 justify-end max-w-[160px]">
-                {topNotes.map((d) => (
-                  <DescriptorChip key={d.id} descriptor={d} />
-                ))}
+
+            {/* Attribute bars with their own notes */}
+            {SCA_ATTRS.some((a) => scores[a.key as keyof Scores] !== "") && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-5 gap-y-3">
+                {SCA_ATTRS.map((attr) => {
+                  const val = scores[attr.key as keyof Scores];
+                  const isSet = val !== "" && !isNaN(parseFloat(val));
+                  if (!isSet) return null;
+                  const num = parseFloat(val);
+                  const pct = ((num - 6) / 4) * 100;
+                  const attrNotes = descriptors.filter((d) => d.attrKey === attr.key);
+                  return (
+                    <div key={attr.key} className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-neutral-500">{attr.label}</span>
+                        <span className="text-[10px] font-mono font-bold tabular-nums" style={{ color: attr.color }}>
+                          {num.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="h-1 rounded-full bg-neutral-200 overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{ width: `${pct}%`, background: attr.color }}
+                        />
+                      </div>
+                      {attrNotes.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {attrNotes.map((d) => (
+                            <DescriptorChip key={d.id} descriptor={d} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
+
+            {/* Unattached flavor notes (no attrKey) */}
+            {(() => {
+              const unattached = descriptors.filter((d) => !d.attrKey);
+              if (!unattached.length) return null;
+              return (
+                <div className="flex flex-wrap gap-1.5 pt-1 border-t border-neutral-100">
+                  {unattached.map((d) => (
+                    <DescriptorChip key={d.id} descriptor={d} />
+                  ))}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Roast Level */}
@@ -883,10 +955,8 @@ function CuppingForm({
                     className="flex flex-col items-center gap-1.5 rounded-xl px-4 py-3 border-2 transition-all hover:scale-105"
                     style={{
                       background: r.bg,
-                      borderColor: active ? r.text === "#fff" ? "rgba(255,255,255,0.6)" : r.bg : "transparent",
-                      boxShadow: active ? `0 0 0 2px ${r.bg}` : "none",
-                      outline: active ? `2px solid ${r.bg}` : "none",
-                      outlineOffset: "2px",
+                      borderColor: active ? (r.text === "#fff" ? r.bg : r.text) : r.text === "#fff" ? "transparent" : r.text + "40",
+                      boxShadow: active ? `0 0 0 2px white, 0 0 0 4px ${r.text === "#fff" ? r.bg : r.text}` : "none",
                     }}
                   >
                     <span
@@ -1097,7 +1167,7 @@ export function SamplesClient({ initialSamples }: { initialSamples: SampleRow[] 
     if (!activeSampleId) return;
     const score = computeScore(scores);
     if (score === null) return;
-    const storedDescriptors: StoredDescriptor[] = descriptors.map(({ label, family }) => ({ label, family }));
+    const storedDescriptors: StoredDescriptor[] = descriptors.map(({ label, family, attrKey }) => ({ label, family, attrKey }));
 
     startTransition(async () => {
       await saveCuppingSession(activeSampleId, scores, storedDescriptors, score);
@@ -1147,16 +1217,15 @@ export function SamplesClient({ initialSamples }: { initialSamples: SampleRow[] 
     const { sample, type } = exportTarget;
     const filename = `${sample.name.replace(/[^a-z0-9]/gi, "_")}.${type}`;
 
-    if (type === "png") {
-      toast.promise(downloadPNG(el, filename), {
-        loading: "Generating PNG…", success: "Downloaded!", error: "Export failed",
-      });
-    } else {
-      toast.promise(downloadPDF(el, filename), {
-        loading: "Generating PDF…", success: "Downloaded!", error: "Export failed",
-      });
-    }
-    setExportTarget(null);
+    const promise = type === "png"
+      ? downloadPNG(el, filename)
+      : downloadPDF(el, filename);
+    toast.promise(promise, {
+      loading: type === "png" ? "Generating PNG…" : "Generating PDF…",
+      success: "Downloaded!",
+      error: "Export failed",
+    });
+    promise.finally(() => setExportTarget(null));
   }, [exportTarget]);
 
   if (activeSample) {

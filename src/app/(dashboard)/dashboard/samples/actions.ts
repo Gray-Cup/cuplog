@@ -119,7 +119,7 @@ export async function saveCuppingSession(
     faults: string;
     notes: string;
   },
-  descriptors: { label: string; family: string }[],
+  descriptors: { label: string; family: string; attrKey?: string }[],
   finalScore: number
 ): Promise<void> {
   const user = await getUser();
