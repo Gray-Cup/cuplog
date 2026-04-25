@@ -18,9 +18,6 @@ export default function MarketingLayout({
               <span className="text-md font-bold text-neutral-800 font-heading">CupLog</span>
             </Link>
             <nav className="hidden text-sm md:flex gap-6">
-              <Link href="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </Link>
               <Link href="https://graycup.org" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
                 Developed by Gray Cup
               </Link>
